@@ -35,15 +35,15 @@ mkdir Release
 mkdir RelWithDebInfo
 mkdir MinSizeRel
 cd Debug
-cmake ../../src -DCMAKE_MODULE_PATH=/home/gael/SFML/2.4.2/share/SFML/cmake/Modules -DSFML_ROOT=/home/gael/SFML/2.4.2/ -DCMAKE_BUILD_TYPE=Debug
+cmake ../../src -DCMAKE_MODULE_PATH=/home/gael/SFML/2.4.2/ -DSFML_ROOT=/home/gael/SFML/2.4.2/ -DCMAKE_BUILD_TYPE=Debug
 make
 cd ../Release
-cmake ../../src -DCMAKE_MODULE_PATH=/home/gael/SFML/2.4.2/share/SFML/cmake/Modules -DSFML_ROOT=/home/gael/SFML/2.4.2/ -DCMAKE_BUILD_TYPE=Release
+cmake ../../src -DCMAKE_MODULE_PATH=/home/gael/SFML/2.4.2/ -DSFML_ROOT=/home/gael/SFML/2.4.2/ -DCMAKE_BUILD_TYPE=Release
 make
 cd ../RelWithDebInfo
-cmake ../../src -DCMAKE_MODULE_PATH=/home/gael/SFML/2.4.2/share/SFML/cmake/Modules -DSFML_ROOT=/home/gael/SFML/2.4.2/ -DCMAKE_BUILD_TYPE=RelWithDebInfo
+cmake ../../src -DCMAKE_MODULE_PATH=/home/gael/SFML/2.4.2/ -DSFML_ROOT=/home/gael/SFML/2.4.2/ -DCMAKE_BUILD_TYPE=RelWithDebInfo
 make
 cd ../MinSizeRel
-cmake ../../src -DCMAKE_MODULE_PATH=/home/gael/SFML/2.4.2/share/SFML/cmake/Modules -DSFML_ROOT=/home/gael/SFML/2.4.2/ -DCMAKE_BUILD_TYPE=MinSizeRel
+cmake ../../src -DCMAKE_MODULE_PATH=/home/gael/SFML/2.4.2/ -DSFML_ROOT=/home/gael/SFML/2.4.2/ -DCMAKE_BUILD_TYPE=MinSizeRel
 make
 ```
