@@ -1,5 +1,7 @@
 #set the minimum cmake version required
-cmake_minimum_required(VERSION 3.9.1)
+cmake_minimum_required(VERSION 3.15)
+
+set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
 
 #set the name of the project
 project(zelda)
@@ -10,13 +12,12 @@ set(CMAKE_CXX_STANDARD 17)
 #set the root source directory as include directory
 include_directories(${CMAKE_SOURCE_DIR})
 
-#find SFML
-set(SFML_STATIC_LIBRARIES TRUE)
-find_package(SFML 2.4.2 REQUIRED network audio graphics window system)
-include_directories(${SFML_INCLUDE_DIR})
-
 #add all subdirectory
-add_subdirectory(imgui)
+set(BUILD_SHARED_LIBS FALSE)
+set(SFML_USE_STATIC_STD_LIBS TRUE)
+add_subdirectory(SFML)
+set(IMGUI_SFML_FIND_SFML FALSE)
+add_subdirectory(imgui-sfml)
 add_subdirectory(rapidXML)
 
 #enable warning and treat them as errors
@@ -33,7 +34,7 @@ file(GLOB MAIN_SOURCES
 )
 add_executable(main ${MAIN_SOURCES})
 set_target_properties(main PROPERTIES LINKER_LANGUAGE CXX)
-target_link_libraries(main imgui ${SFML_LIBRARIES} ${SFML_DEPENDENCIES})
+target_link_libraries(main ImGui-SFML::ImGui-SFML)
 
 #copy needed files
 file(GLOB FILES

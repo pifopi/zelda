@@ -3,7 +3,7 @@
 #include "Tileset.h"
 
 #include <imgui/imgui.h>
-#include <imgui/imgui-SFML.h>
+#include <imgui-sfml/imgui-SFML.h>
 #include <rapidXML/rapidxml.hpp>
 #include <SFML/Graphics/RectangleShape.hpp>
 #include <SFML/Graphics/RenderWindow.hpp>
