@@ -10,7 +10,7 @@
 
 namespace
 {
-    static const float k_step = 2.f;
+    static const float k_step = 4.f;
 }
 
 namespace Zelda
@@ -190,10 +190,8 @@ namespace Zelda
             switch (elem)
             {
                 case TileType::Empty:
-                    break;
                 case TileType::Full:
-                    assert(false);
-                    exit(EXIT_FAILURE);
+                    break;
                 case TileType::NPC:
                     ImGui::OpenPopup("NPC");
                     ImGui::BeginPopupModal("NPC");
