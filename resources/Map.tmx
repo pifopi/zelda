@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" tiledversion="1.0.3" orientation="orthogonal" renderorder="right-up" width="80" height="80" tilewidth="32" tileheight="32" nextobjectid="1">
+<map version="1.4" tiledversion="1.4.3" orientation="orthogonal" renderorder="right-up" width="80" height="80" tilewidth="32" tileheight="32" infinite="0" nextlayerid="2" nextobjectid="1">
  <tileset firstgid="1" name="tileset" tilewidth="32" tileheight="32" tilecount="768" columns="8">
   <image source="Tileset.png" width="256" height="3072"/>
   <tile id="0">
@@ -574,7 +574,7 @@
   </tile>
   <tile id="114">
    <properties>
-    <property name="type" value="Empty"/>
+    <property name="type" value="NPC"/>
    </properties>
   </tile>
   <tile id="115">
@@ -764,7 +764,7 @@
   </tile>
   <tile id="152">
    <properties>
-    <property name="type" value="Empty"/>
+    <property name="type" value="NPC"/>
    </properties>
   </tile>
   <tile id="153">
@@ -2494,7 +2494,7 @@
   </tile>
   <tile id="498">
    <properties>
-    <property name="type" value="Empty"/>
+    <property name="type" value="NPC"/>
    </properties>
   </tile>
   <tile id="499">
@@ -2684,7 +2684,7 @@
   </tile>
   <tile id="536">
    <properties>
-    <property name="type" value="Empty"/>
+    <property name="type" value="NPC"/>
    </properties>
   </tile>
   <tile id="537">
@@ -3843,7 +3843,7 @@
    </properties>
   </tile>
  </tileset>
- <layer name="map" width="80" height="80" opacity="0.99">
+ <layer id="1" name="map" width="80" height="80" opacity="0.99">
   <data encoding="csv">
 762,763,764,765,766,762,763,764,765,766,762,763,764,765,766,762,763,764,765,766,762,763,764,765,766,762,763,764,765,766,762,763,764,765,766,762,763,764,765,766,762,763,764,765,766,762,763,764,765,766,762,763,764,765,766,762,763,764,765,766,762,763,764,765,766,762,763,764,765,766,762,763,764,765,766,762,763,764,765,766,
 481,482,483,484,485,481,482,483,484,485,481,482,483,484,485,481,482,483,484,485,481,482,483,484,485,481,482,483,484,485,481,482,483,484,485,481,482,483,484,485,481,482,483,484,485,481,482,483,484,485,481,482,483,484,485,481,482,483,484,485,481,482,483,484,485,481,482,483,484,485,481,482,483,484,485,481,482,483,484,485,
