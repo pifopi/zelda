@@ -4,22 +4,15 @@ on: [push, pull_request, workflow_dispatch]
 
 jobs:
   build:
-
-    runs-on: ${{ matrix.os }}
-
-    strategy:
-      matrix:
-        os: [windows-latest]
+    runs-on: windows-latest
 
     steps:
     - uses: actions/checkout@v2
       with:
         submodules: 'recursive'
     - name: Add msbuild to PATH
-      if: contains( matrix.os, 'windows')
       uses: microsoft/setup-msbuild@v1.0.2
     - name: C++ generation
-      if: contains( matrix.os, 'windows')
       run: |
         mkdir bin
         cd bin
@@ -30,48 +23,10 @@ jobs:
         MSBuild.exe .\main.vcxproj /p:Configuration=MinSizeRel
         move *.png Release/
         move *.tmx Release/
-    - name: C++ generation
-      if: contains( matrix.os, 'ubuntu') || contains( matrix.os, 'macOS')
-      run: |
-        mkdir bin
-        cd bin
-        mkdir Debug
-        mkdir Release
-        mkdir RelWithDebInfo
-        mkdir MinSizeRel
-        cd Debug
-        cmake ../../src -DIMGUI_DIR=${{ github.workspace }}/src/imgui/ -DCMAKE_BUILD_TYPE=Debug
-        make
-        cd ../Release
-        cmake ../../src -DIMGUI_DIR=${{ github.workspace }}/src/imgui/ -DCMAKE_BUILD_TYPE=Release
-        make
-        cd ../RelWithDebInfo
-        cmake ../../src -DIMGUI_DIR=${{ github.workspace }}/src/imgui/ -DCMAKE_BUILD_TYPE=RelWithDebInfo
-        make
-        cd ../MinSizeRel
-        cmake ../../src -DIMGUI_DIR=${{ github.workspace }}/src/imgui/ -DCMAKE_BUILD_TYPE=MinSizeRel
-        make
     - uses: actions/upload-artifact@v2
-      if: contains( matrix.os, 'windows')
       with:
         name: Zelda executable for windows
         path: |
           bin/Release/main.exe
-          bin/Release/*.png
-          bin/Release/*.tmx
-    - uses: actions/upload-artifact@v2
-      if: contains( matrix.os, 'ubuntu')
-      with:
-        name: Zelda executable for ubuntu
-        path: |
-          bin/Release/main
-          bin/Release/*.png
-          bin/Release/*.tmx
-    - uses: actions/upload-artifact@v2
-      if: contains( matrix.os, 'mac')
-      with:
-        name: Zelda executable for mac
-        path: |
-          bin/Release/main
           bin/Release/*.png
           bin/Release/*.tmx
