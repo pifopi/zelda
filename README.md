@@ -24,6 +24,6 @@ You have an example on how to build with build.cmd
 
 # GCC
 
-Don't forget to launch the executable from it's own directory (to find the copied resources)
+Don't forget to launch the executable from its own directory (to find the copied resources)
 
 You have an example on how to build with build.sh
