@@ -32,9 +32,9 @@ file(GLOB MAIN_SOURCES
 	*.h
 	*.hpp
 )
-add_executable(main ${MAIN_SOURCES})
-set_target_properties(main PROPERTIES LINKER_LANGUAGE CXX)
-target_link_libraries(main ImGui-SFML::ImGui-SFML)
+add_executable(zelda ${MAIN_SOURCES})
+set_target_properties(zelda PROPERTIES LINKER_LANGUAGE CXX)
+target_link_libraries(zelda ImGui-SFML::ImGui-SFML)
 
 #copy needed files
 file(GLOB FILES
