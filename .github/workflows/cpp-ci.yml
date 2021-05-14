@@ -17,16 +17,16 @@ jobs:
         mkdir bin
         cd bin
         cmake ../src/ -G "Visual Studio 16" -DIMGUI_DIR=${{ github.workspace }}/src/imgui/
-        MSBuild.exe .\main.vcxproj /p:Configuration=Debug
-        MSBuild.exe .\main.vcxproj /p:Configuration=Release
-        MSBuild.exe .\main.vcxproj /p:Configuration=RelWithDebInfo
-        MSBuild.exe .\main.vcxproj /p:Configuration=MinSizeRel
+        MSBuild.exe .\zelda.vcxproj /p:Configuration=Debug
+        MSBuild.exe .\zelda.vcxproj /p:Configuration=Release
+        MSBuild.exe .\zelda.vcxproj /p:Configuration=RelWithDebInfo
+        MSBuild.exe .\zelda.vcxproj /p:Configuration=MinSizeRel
         move *.png Release/
         move *.tmx Release/
     - uses: actions/upload-artifact@v2
       with:
         name: Zelda executable for windows
         path: |
-          bin/Release/main.exe
+          bin/Release/zelda.exe
           bin/Release/*.png
           bin/Release/*.tmx
