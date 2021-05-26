@@ -15,8 +15,8 @@ namespace
 {
     static const Zelda::U32 k_numberTilesPerRow = 32;
     static const Zelda::U32 k_numberTilesPerColumn = 28;
-    static const Zelda::U32 k_windowWidth = Zelda::Map::k_tileWidth * k_numberTilesPerRow;
-    static const Zelda::U32 k_windowsHeight = Zelda::Map::k_tileHeight * k_numberTilesPerColumn;
+    static const Zelda::U32 k_windowWidth = Zelda::Tileset::k_tileWidth * k_numberTilesPerRow;
+    static const Zelda::U32 k_windowsHeight = Zelda::Tileset::k_tileHeight * k_numberTilesPerColumn;
 }
 
 sf::Int64 GetCurrentFPS(const sf::Clock& clock)
@@ -26,7 +26,8 @@ sf::Int64 GetCurrentFPS(const sf::Clock& clock)
 
 int main()
 {
-    Zelda::Tileset::Instance().LoadXML("Map.tmx");
+    Zelda::Map map;
+    map.LoadXML("Map.tmx");
 
     sf::RenderWindow window(sf::VideoMode(k_windowWidth, k_windowsHeight, 32), "Zelda 2D");
     window.setVerticalSyncEnabled(true);
@@ -44,39 +45,40 @@ int main()
 
             switch (event.type)
             {
-                case sf::Event::Closed:
-                    window.close();
-                    break;
+            case sf::Event::Closed:
+                window.close();
+                break;
 
-                case sf::Event::KeyPressed:
-                    if (event.key.code == sf::Keyboard::L)
-                    {
-                        Zelda::Tileset::Instance().LoadXML("Map.tmx");
-                    }
-                    break;
-                default:
-                    break;
+            case sf::Event::KeyPressed:
+                if (event.key.code == sf::Keyboard::L)
+                {
+                    map.LoadXML("Map.tmx");
+                }
+                break;
+            default:
+                break;
             }
         }
 
         window.clear();
         ImGui::SFML::Update(window, clock.getElapsedTime());
-        player.Update();
+        player.Update(map);
 
         auto playerShape = player.GetShape();
-        const float& xPosition = playerShape.getPosition().x;
-        const float& yPosition = playerShape.getPosition().y;
-        const float& ymin = (yPosition - k_windowsHeight / 2) / Zelda::Map::k_tileHeight;
-        const float& ymax = (yPosition + k_windowsHeight / 2) / Zelda::Map::k_tileHeight;
-        const float& xmin = (xPosition - k_windowWidth / 2) / Zelda::Map::k_tileWidth;
-        const float& xmax = (xPosition + k_windowWidth / 2) / Zelda::Map::k_tileWidth;
+        const auto& playerPosition = playerShape.getPosition();
+        const float xPosition = playerPosition.x;
+        const float yPosition = playerPosition.y;
+        const float ymin = (yPosition - k_windowsHeight / 2) / Zelda::Tileset::k_tileHeight;
+        const float ymax = (yPosition + k_windowsHeight / 2) / Zelda::Tileset::k_tileHeight;
+        const float xmin = (xPosition - k_windowWidth / 2) / Zelda::Tileset::k_tileWidth;
+        const float xmax = (xPosition + k_windowWidth / 2) / Zelda::Tileset::k_tileWidth;
 
         for (int y = static_cast<int> (ymin - 1); y < ymax; ++y)
         {
             for (int x = static_cast<int> (xmin - 1); x < xmax; ++x)
             {
-                auto tile = Zelda::Tileset::Instance().GetView(x, y);
-                tile.setPosition((x - xmin) * Zelda::Map::k_tileWidth, (y - ymin) * Zelda::Map::k_tileHeight);
+                auto tile = map.GetSprite(x, y);
+                tile.setPosition((x - xmin) * Zelda::Tileset::k_tileWidth, (y - ymin) * Zelda::Tileset::k_tileHeight);
                 window.draw(tile);
             }
         }
@@ -88,8 +90,8 @@ int main()
 
         if (ImGui::TreeNode("Position"))
         {
-            ImGui::Text("Position X : %f, (tile : %f)", player.GetShape().getPosition().x, player.GetShape().getPosition().x / Zelda::Map::k_tileWidth);
-            ImGui::Text("Position Y : %f, (tile : %f)", player.GetShape().getPosition().y, player.GetShape().getPosition().y / Zelda::Map::k_tileHeight);
+            ImGui::Text("Position X : %f, (tile : %f)", xPosition, xPosition / Zelda::Tileset::k_tileWidth);
+            ImGui::Text("Position Y : %f, (tile : %f)", yPosition, yPosition / Zelda::Tileset::k_tileHeight);
             ImGui::TreePop();
         }
 

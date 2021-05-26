@@ -1,10 +1,14 @@
 #pragma once
 
 #include "Utils.h"
-
-#include <rapidXML/rapidxml.hpp>
+#include "Tileset.h"
 
 #include <vector>
+
+namespace sf
+{
+    class Sprite;
+}
 
 namespace Zelda
 {
@@ -12,18 +16,17 @@ namespace Zelda
         : public NonCopyable
     {
     public:
-        static Map& Instance();
-        void LoadXML(rapidxml::xml_node<>* layerNode);
-        TileNumber GetTileNumber(const S32& x, const S32& y) const;
+        void LoadXML(const std::string& path);
+        const sf::Sprite& GetSprite(S32 x, const S32 y);
+        TileType GetTileType(S32 x, const S32 y) const;
 
-        static const U32 k_tileWidth = 32;
-        static const U32 k_tileHeight = 32;
-        static const TileNumber k_defaultTileNumber = 88;
+        static constexpr TileNumber k_defaultTileNumber = 88;
 
     private:
         S32 GetSizeX() const;
         S32 GetSizeY() const;
 
+        Tileset m_tileset;
         std::vector<std::vector<TileNumber>> m_tilesNumber;
     };
 }

@@ -1,19 +1,32 @@
 #include "Map.h"
 
+#include <rapidXML/rapidxml.hpp>
+#include <SFML/Graphics/Sprite.hpp>
+
 #include <fstream>
 #include <sstream>
 
 namespace Zelda
 {
-    Map& Map::Instance()
-    {
-        static Map instance;
-        return instance;
-    }
-
-    void Map::LoadXML(rapidxml::xml_node<>* layerNode)
+    void Map::LoadXML(const std::string& path)
     {
         m_tilesNumber.clear();
+
+        /*Read the xml file into a vector*/
+        auto file = std::ifstream(path);
+        auto buffer = std::vector<char>(std::istreambuf_iterator<char>(file), std::istreambuf_iterator<char>());
+        buffer.push_back('\0');
+
+        /*Parse the buffer using the xml file parsing library into doc*/
+        rapidxml::xml_document<> doc;
+        doc.parse<0>(&buffer[0]);
+
+        /*Find our root node*/
+        const auto& rootNode = doc.first_node("map");
+
+        m_tileset.LoadXML(rootNode->first_node("tileset"));
+
+        const auto& layerNode = rootNode->first_node("layer");
 
         const auto& dataNode = layerNode->first_node("data");
 
@@ -35,13 +48,22 @@ namespace Zelda
         }
     }
 
-    TileNumber Map::GetTileNumber(const S32& x, const S32& y) const
+    const sf::Sprite& Map::GetSprite(S32 x, const S32 y)
     {
         if (x < 0 || y < 0 || x >= GetSizeX() || y >= GetSizeY())
         {
-            return k_defaultTileNumber;
+            return m_tileset.GetSprite(k_defaultTileNumber);
         }
-        return m_tilesNumber[y][x];
+        return m_tileset.GetSprite(m_tilesNumber[y][x]);
+    }
+
+    TileType Map::GetTileType(const S32 x, const S32 y) const
+    {
+        if (x < 0 || y < 0 || x >= GetSizeX() || y >= GetSizeY())
+        {
+            return TileType::Full;
+        }
+        return m_tileset.GetTileType(m_tilesNumber[y][x]);
     }
 
     S32 Map::GetSizeX() const

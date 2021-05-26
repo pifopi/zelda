@@ -15,13 +15,13 @@ namespace Zelda
     public:
         Player(const sf::Vector2f& position, const sf::Vector2f& size);
         const sf::RectangleShape& GetShape() const;
-        void Update();
+        void Update(const Map& map);
 
     private:
-        void UpdateWithJoystick();
-        void UpdateWithKeyboard();
-        void MoveTo(const Direction& direction, const float& wantedX, const float& wantedY);
-        void SetTexture(const Direction& direction);
+        void UpdateWithJoystick(const Map& map);
+        void UpdateWithKeyboard(const Map& map);
+        void MoveTo(Direction direction, float wantedX, float wantedY, const Map& map);
+        void SetTexture(Direction direction);
 
         sf::RectangleShape m_shape;
         std::array<sf::Texture, 4> m_textures;

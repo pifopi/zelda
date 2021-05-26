@@ -10,7 +10,7 @@
 
 namespace
 {
-    static const float k_step = 4.f;
+    static constexpr float k_step = 4.f;
 }
 
 namespace Zelda
@@ -31,112 +31,117 @@ namespace Zelda
         return m_shape;
     }
 
-    void Player::Update()
+    void Player::Update(const Map& map)
     {
         if (sf::Joystick::isConnected(0))
         {
-            UpdateWithJoystick();
+            UpdateWithJoystick(map);
         }
         else
         {
-            UpdateWithKeyboard();
+            UpdateWithKeyboard(map);
         }
     }
 
-    void Player::UpdateWithJoystick()
+    void Player::UpdateWithJoystick(const Map& map)
     {
-        const float& stepX = k_step * sf::Joystick::getAxisPosition(0, sf::Joystick::X) / 100;
-        const float& stepY = k_step * sf::Joystick::getAxisPosition(0, sf::Joystick::Y) / 100;
+        const float stepX = k_step * sf::Joystick::getAxisPosition(0, sf::Joystick::X) / 100;
+        const float stepY = k_step * sf::Joystick::getAxisPosition(0, sf::Joystick::Y) / 100;
+
+        const float absStepX = std::abs(stepX);
+        const float absStepY = std::abs(stepY);
+
+        const float currentPositionX = m_shape.getPosition().x;
+        const float currentPositionY = m_shape.getPosition().y;
 
         if (stepY < 0)
         {
-            if (std::abs(stepY) > std::abs(stepX))
+            if (absStepY > absStepX)
             {
                 SetTexture(Direction::Up);
             }
-            MoveTo(Direction::Up, m_shape.getPosition().x, m_shape.getPosition().y + stepY);
+            MoveTo(Direction::Up, m_shape.getPosition().x, m_shape.getPosition().y + stepY, map);
         }
         else
         {
-            if (std::abs(stepY) > std::abs(stepX))
+            if (absStepY > absStepX)
             {
                 SetTexture(Direction::Down);
             }
-            MoveTo(Direction::Down, m_shape.getPosition().x, m_shape.getPosition().y + stepY);
+            MoveTo(Direction::Down, m_shape.getPosition().x, m_shape.getPosition().y + stepY, map);
         }
 
         if (stepX > 0)
         {
-            if (std::abs(stepX) > std::abs(stepY))
+            if (absStepX > absStepY)
             {
                 SetTexture(Direction::Right);
             }
-            MoveTo(Direction::Right, m_shape.getPosition().x + stepX, m_shape.getPosition().y);
+            MoveTo(Direction::Right, m_shape.getPosition().x + stepX, m_shape.getPosition().y, map);
         }
         else
         {
-            if (std::abs(stepX) > std::abs(stepY))
+            if (absStepX > absStepY)
             {
                 SetTexture(Direction::Left);
             }
-            MoveTo(Direction::Left, m_shape.getPosition().x + stepX, m_shape.getPosition().y);
+            MoveTo(Direction::Left, m_shape.getPosition().x + stepX, m_shape.getPosition().y, map);
         }
     }
 
-    void Player::UpdateWithKeyboard()
+    void Player::UpdateWithKeyboard(const Map& map)
     {
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up) || sf::Keyboard::isKeyPressed(sf::Keyboard::Z))
         {
             SetTexture(Direction::Up);
-            MoveTo(Direction::Up, m_shape.getPosition().x, m_shape.getPosition().y - k_step);
+            MoveTo(Direction::Up, m_shape.getPosition().x, m_shape.getPosition().y - k_step, map);
         }
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down) || sf::Keyboard::isKeyPressed(sf::Keyboard::S))
         {
             SetTexture(Direction::Down);
-            MoveTo(Direction::Down, m_shape.getPosition().x, m_shape.getPosition().y + k_step);
+            MoveTo(Direction::Down, m_shape.getPosition().x, m_shape.getPosition().y + k_step, map);
         }
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right) || sf::Keyboard::isKeyPressed(sf::Keyboard::D))
         {
             SetTexture(Direction::Right);
-            MoveTo(Direction::Right, m_shape.getPosition().x + k_step, m_shape.getPosition().y);
+            MoveTo(Direction::Right, m_shape.getPosition().x + k_step, m_shape.getPosition().y, map);
         }
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left) || sf::Keyboard::isKeyPressed(sf::Keyboard::Q))
         {
             SetTexture(Direction::Left);
-            MoveTo(Direction::Left, m_shape.getPosition().x - k_step, m_shape.getPosition().y);
+            MoveTo(Direction::Left, m_shape.getPosition().x - k_step, m_shape.getPosition().y, map);
         }
     }
 
-    void Player::MoveTo(const Direction& direction, const float& wantedX, const float& wantedY)
+    void Player::MoveTo(const Direction direction, const float wantedX, const float wantedY, const Map& map)
     {
         float realX = wantedX;
         float realY = wantedY;
 
-        const U32& yPlayerSize = static_cast<U32>(m_shape.getSize().y);
-        const U32& xPlayerSize = static_cast<U32>(m_shape.getSize().x);
+        const U32 yPlayerSize = static_cast<U32>(m_shape.getSize().y);
+        const U32 xPlayerSize = static_cast<U32>(m_shape.getSize().x);
 
-        const float& topPlayer = wantedY;
-        const float& bottomPlayer = wantedY + yPlayerSize;
-        const float& leftPlayer = wantedX;
-        const float& rightPlayer = wantedX + xPlayerSize;
+        const float topPlayer = wantedY;
+        const float bottomPlayer = wantedY + yPlayerSize;
+        const float leftPlayer = wantedX;
+        const float rightPlayer = wantedX + xPlayerSize;
 
-        const S32& yMin = static_cast<S32>(wantedY / Map::k_tileHeight - 1);
-        const S32& yMax = static_cast<S32>((wantedY + yPlayerSize) / Map::k_tileHeight + 1);
-        const S32& xMin = static_cast<S32>(wantedX / Map::k_tileWidth - 1);
-        const S32& xMax = static_cast<S32>((wantedX + xPlayerSize) / Map::k_tileWidth + 1);
+        const S32 yMin = static_cast<S32>(wantedY / Tileset::k_tileHeight - 1);
+        const S32 yMax = static_cast<S32>((wantedY + yPlayerSize) / Tileset::k_tileHeight + 1);
+        const S32 xMin = static_cast<S32>(wantedX / Tileset::k_tileWidth - 1);
+        const S32 xMax = static_cast<S32>((wantedX + xPlayerSize) / Tileset::k_tileWidth + 1);
 
         auto collisions = std::unordered_set<TileType>();
         for (S32 y = yMin; y < yMax; ++y)
         {
             for (S32 x = xMin; x < xMax; ++x)
             {
-                const S32& topTile = y * Map::k_tileHeight;
-                const S32& bottomTile = (y + 1) * Map::k_tileHeight;
-                const S32& leftTile = x * Map::k_tileWidth;
-                const S32& rightTile = (x + 1) * Map::k_tileWidth;
+                const S32 topTile = y * Tileset::k_tileHeight;
+                const S32 bottomTile = (y + 1) * Tileset::k_tileHeight;
+                const S32 leftTile = x * Tileset::k_tileWidth;
+                const S32 rightTile = (x + 1) * Tileset::k_tileWidth;
 
-                const auto& tileNumber = Map::Instance().GetTileNumber(x, y);
-                const auto& tileType = Tileset::Instance().GetTileType(tileNumber);
+                const auto& tileType = map.GetTileType(x, y);
 
                 if (tileType == TileType::Empty ||
                     topPlayer >= bottomTile ||
@@ -148,37 +153,37 @@ namespace Zelda
                 }
                 switch (direction)
                 {
-                    case Direction::Up:
-                        if (std::abs(topPlayer - bottomTile) <= k_step)
-                        {
-                            collisions.insert(tileType);
-                            realY = m_shape.getPosition().y;
-                        }
-                        break;
-                    case Direction::Down:
-                        if (std::abs(bottomPlayer - topTile) <= k_step)
-                        {
-                            collisions.insert(tileType);
-                            realY = m_shape.getPosition().y;
-                        }
-                        break;
-                    case Direction::Right:
-                        if (std::abs(rightPlayer - leftTile) <= k_step)
-                        {
-                            collisions.insert(tileType);
-                            realX = m_shape.getPosition().x;
-                        }
-                        break;
-                    case Direction::Left:
-                        if (std::abs(leftPlayer - rightTile) <= k_step)
-                        {
-                            collisions.insert(tileType);
-                            realX = m_shape.getPosition().x;
-                        }
-                        break;
-                    default:
-                        assert(false);
-                        exit(EXIT_FAILURE);
+                case Direction::Up:
+                    if (std::abs(topPlayer - bottomTile) <= k_step)
+                    {
+                        collisions.insert(tileType);
+                        realY = m_shape.getPosition().y;
+                    }
+                    break;
+                case Direction::Down:
+                    if (std::abs(bottomPlayer - topTile) <= k_step)
+                    {
+                        collisions.insert(tileType);
+                        realY = m_shape.getPosition().y;
+                    }
+                    break;
+                case Direction::Right:
+                    if (std::abs(rightPlayer - leftTile) <= k_step)
+                    {
+                        collisions.insert(tileType);
+                        realX = m_shape.getPosition().x;
+                    }
+                    break;
+                case Direction::Left:
+                    if (std::abs(leftPlayer - rightTile) <= k_step)
+                    {
+                        collisions.insert(tileType);
+                        realX = m_shape.getPosition().x;
+                    }
+                    break;
+                default:
+                    assert(false);
+                    exit(EXIT_FAILURE);
                 }
             }
         }
@@ -189,26 +194,28 @@ namespace Zelda
         {
             switch (elem)
             {
-                case TileType::Empty:
-                case TileType::Full:
-                    break;
-                case TileType::NPC:
-                    ImGui::OpenPopup("NPC");
-                    ImGui::BeginPopupModal("NPC");
-                    ImGui::Text("Hello, do you know what I'm doing there ?");
-                    ImGui::EndPopup();
-                    break;
-                case TileType::Object:
-                    ImGui::OpenPopup("Object");
-                    ImGui::BeginPopupModal("Object");
-                    ImGui::Text("You found a new object !! What is that ?");
-                    ImGui::EndPopup();
-                    break;
+            case TileType::Empty:
+                assert(false);
+                exit(EXIT_FAILURE);
+            case TileType::Full:
+                break;
+            case TileType::NPC:
+                ImGui::OpenPopup("NPC");
+                ImGui::BeginPopupModal("NPC");
+                ImGui::Text("Hello, do you know what I'm doing there ?");
+                ImGui::EndPopup();
+                break;
+            case TileType::Object:
+                ImGui::OpenPopup("Object");
+                ImGui::BeginPopupModal("Object");
+                ImGui::Text("You found a new object !! What is that ?");
+                ImGui::EndPopup();
+                break;
             }
         }
     }
 
-    void Player::SetTexture(const Direction& direction)
+    void Player::SetTexture(const Direction direction)
     {
         m_shape.setTexture(&m_textures[static_cast<U32>(direction)]);
     }

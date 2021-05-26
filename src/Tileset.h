@@ -7,20 +7,28 @@
 
 #include <vector>
 
+namespace rapidxml
+{
+    template<typename T>
+    class xml_node;
+}
+
 namespace Zelda
 {
     class Tileset
         : public NonCopyable
     {
     public:
-        static Tileset& Instance();
-        void LoadXML(const std::string& path);
-        const sf::Sprite& GetView(const U32& x, const U32& y);
-        const TileType& GetTileType(const TileNumber& tileNumber) const;
+        void LoadXML(const rapidxml::xml_node<char>* tilesetNode);
+        const sf::Sprite& GetSprite(TileNumber tileNumber);
+        TileType GetTileType(TileNumber tileNumber) const;
+
+        static constexpr U32 k_tileWidth = 32;
+        static constexpr U32 k_tileHeight = 32;
 
     private:
         sf::Sprite m_tiles;
         sf::Texture m_tilesTexture;
-        std::vector<TileType> m_typeTile;
+        std::vector<TileType> m_tilesType;
     };
 }

@@ -1,13 +1,14 @@
 #set the minimum cmake version required
-cmake_minimum_required(VERSION 3.15)
+cmake_minimum_required(VERSION 3.16.0)
 
 set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
 
 #set the name of the project
 project(zelda)
 
-#enable c++ 17
-set(CMAKE_CXX_STANDARD 17)
+#enable c++ 20
+set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 #set the root source directory as include directory
 include_directories(${CMAKE_SOURCE_DIR})
