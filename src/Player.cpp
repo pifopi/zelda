@@ -51,9 +51,6 @@ namespace Zelda
         const float absStepX = std::abs(stepX);
         const float absStepY = std::abs(stepY);
 
-        const float currentPositionX = m_shape.getPosition().x;
-        const float currentPositionY = m_shape.getPosition().y;
-
         if (stepY < 0)
         {
             if (absStepY > absStepX)

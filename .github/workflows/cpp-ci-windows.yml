@@ -1,4 +1,4 @@
-name: C++ CI
+name: C++ CI windows
 
 on: [push, pull_request, workflow_dispatch]
 
@@ -16,7 +16,7 @@ jobs:
       run: |
         mkdir bin
         cd bin
-        cmake ../src/ -G "Visual Studio 16" -DIMGUI_DIR=${{ github.workspace }}/src/imgui/
+        cmake ../src/ -G "Visual Studio 16 2019" -DIMGUI_DIR=${{ github.workspace }}/src/imgui/
         MSBuild.exe .\zelda.vcxproj /p:Configuration=Debug
         MSBuild.exe .\zelda.vcxproj /p:Configuration=Release
         MSBuild.exe .\zelda.vcxproj /p:Configuration=RelWithDebInfo

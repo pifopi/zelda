@@ -22,11 +22,14 @@ add_subdirectory(imgui-sfml)
 add_subdirectory(rapidXML)
 
 #enable warning and treat them as errors
-if(CMAKE_COMPILER_IS_GNUCC)
-	set(CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} -Wall -Wextra -Werror")
-elseif(MSVC)
-	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /W4 /WX")
+if (MSVC)
+	add_compile_options(/W4 /WX)
+else()
+    add_compile_options(-Wall -Wextra -pedantic -Werror)
 endif()
+
+#produce clang tidy file
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 file(GLOB MAIN_SOURCES
 	*.cpp
