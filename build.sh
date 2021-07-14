@@ -8,14 +8,14 @@ mkdir Release
 mkdir RelWithDebInfo
 mkdir MinSizeRel
 cd Debug
-cmake ../../src -DIMGUI_DIR=$SCRIPTPATH/src/imgui/ -DCMAKE_BUILD_TYPE=Debug
+cmake ../../src/ -DIMGUI_DIR=$SCRIPTPATH/src/imgui/ -DCMAKE_BUILD_TYPE=Debug
 make
 cd ../Release
-cmake ../../src -DIMGUI_DIR=$SCRIPTPATH/src/imgui/ -DCMAKE_BUILD_TYPE=Release
+cmake ../../src/ -DIMGUI_DIR=$SCRIPTPATH/src/imgui/ -DCMAKE_BUILD_TYPE=Release
 make
 cd ../RelWithDebInfo
-cmake ../../src -DIMGUI_DIR=$SCRIPTPATH/src/imgui/ -DCMAKE_BUILD_TYPE=RelWithDebInfo
+cmake ../../src/ -DIMGUI_DIR=$SCRIPTPATH/src/imgui/ -DCMAKE_BUILD_TYPE=RelWithDebInfo
 make
 cd ../MinSizeRel
-cmake ../../src -DIMGUI_DIR=$SCRIPTPATH/src/imgui/ -DCMAKE_BUILD_TYPE=MinSizeRel
+cmake ../../src/ -DIMGUI_DIR=$SCRIPTPATH/src/imgui/ -DCMAKE_BUILD_TYPE=MinSizeRel
 make
